@@ -1,0 +1,267 @@
+--Criando tabela Sapatos, primeira que fiz
+CREATE TABLE Shoes
+(
+ID	char(10)	PRIMARY KEY,
+Brand	char(10)	NOT NULL,
+Type	char(250)	NOT NULL,
+Color	char(250)	NOT NULL,
+Price	decimal(8,2)	NOT NULL,
+Desc	Varchar(750)	NULL
+);
+
+--Colocando dados dentro da Sapatos!
+INSERT INTO Shoes
+VALUES ('14535974'
+	,'Gucci'
+	,'Slippers'
+	,'Pink'
+	,'695,00'
+	,NULL
+		);
+
+--Criando uma tabela temporária para Sandálias. São deletadas quando a sessão encerrar + são melhores pra consultar complex data rapidamente
+CREATE TEMPORARY TABLE Sandals AS
+(
+	SELECT *
+	FROM shoes
+	WHERE shoe_type = 'sandals'
+);
+
+--PARA COMENTARIOS:
+--comentar uma linha so:
+SELECT shoe_id
+--,brand_id {REMOVE A LINHA}
+,shoe_name
+FROM shoes;
+
+--pra uma seção:
+SELECT shoe_id
+/*,brand_id
+,shoe_name
+{NAO RODA NADA ENTRE ESSES ASTERISCOS E BARRAS}*/
+FROM shoes;
+
+--Fazer um SELECT ordenado:
+SELECT * FROM
+WHERE active
+ORDER BY LastName, FirstName;
+
+--Essa tabela é exemplo!
+CREATE TABLE phonebook(
+	phone VARCHAR(32)
+	,firstname VARCHAR(64)
+	,lastname VARCHAR(54)
+	,address VARCHAR(64)
+);
+
+--Inserção de dados na tabela exemplo:
+INSERT INTO phonebook(
+	phone
+	,firstname
+	,lastname
+	,address
+)
+VALUES(
+	'+1 123 456 7890'
+	,'John'
+	,'Doe'
+	,'North America'
+);
+
+--Atualização na tabela exemplo:
+UPDATE phonebook
+SET 	address = 'South America'
+	,phone = '+1 123 456 0789'
+WHERE	firstname = 'John' AND lastname = 'Doe';
+
+--Deletar dados da tabela exemplo:
+DELETE FROM phonebook WHERE
+WHERE firstname = 'John' AND lastname = 'Doe';
+
+--Alterar dados diretamente sobre a tabela:
+ALTER TABLE phonebook RENAME TO contacts;
+
+--Limpeza rápida e efetiva da tabela para reutilização dela depois:
+TRUNCATE TABLE contacts;
+
+--Remoção total da tabela:
+DROP TABLE contacts;
+
+--Comentário adicional sobre comandos em tabelas compartilhadas:
+/*
+GRANT ALL PRIVILEGES ON database_name TO database_user;
+
+REVOKE ALL PRIVILEGES ON database_name TO database_user;
+*/
+
+--Comando LIKE: exemplo de uso pós-WHERE:
+/*
+SELECT "column1" [, column2,etc]
+FROM "tablename" [WHERE "condition"]
+{DENTRO DE COLCHETES É OPCIONAL}
+
+SELECT first, last, city
+FROM empinfo
+WHERE first LIKE 'Er%';
+
+SELECT first, last
+FROM empinfo
+WHERE last LIKE '%s';
+
+SELECT * FROM empinfo
+WHERE first = 'Eric';
+*/
+
+--Exercício feito com consultas de LIKE:
+/*1. SELECT first, age FROM empinfo;
+2. SELECT first, last, city FROM empinfo WHERE city <> 'Payson';
+3. SELECT * FROM empinfo WHERE age > 40;
+4. SELECT first, last FROM empinfo WHERE last LIKE '%ay';
+5. SELECT * FROM empinfo WHERE first = 'Mary';
+6. SELECT * FROM empinfo WHERE first LIKE '%Mary%';*/
+
+--Nova tabela exemplo:
+CREATE TABLE employee(
+	first varchar(15),
+	last varchar(15),
+	age number(3),
+	address varchar(30),
+	city varchar(30),
+	state varchar(20)
+);
+
+--Nova tabela (essa sim, usada para exercício):
+CREATE TABLE myemployees(
+	firstname varchar(20),
+  	lastname varchar(30),
+  	title varchar(15),
+  	age number(3),
+  	salary decimal(10,2)
+);
+
+--Inserção na exemplo:
+INSERT INTO employee (
+	first,
+	last,
+	age,
+	address,
+	city,
+	state
+) VALUES (
+	'Luke',
+	'Duke',
+	45,
+	'2130 Boards Nest',
+	'Hazard Co',
+	'Georgia'
+);
+
+--Na tabela exercício, precisava inserir os seguintes dados:
+/*
+Josie Weber, Secretary, 28, 19500.00
+Potsy Weber, Programmer, 32, 45300.00
+Dirk Smith, Programmer II, 45, 75020.00
+Thiago Marques, CEO, 18, 400.00
+Mariana Da Silva, CEO, 41, 3000.00
+Theo Eduardo Da Costa, Student, 11, 0.00
+Luiz Cesar da Silva, Retired, 68, 70000.00
+Ida Rachel Hillbrecht Da Silva, Retired, 68, 10000.00
+*/
+
+--Inserção feita no seguinte formato:{farei apenas essa inserção, pra não me prolongar muito aqui}
+INSERT INTO myemployees (
+	firstname,
+  	lastname,
+  	title,
+  	age,
+  	salary
+) VALUES (
+	'Josie',
+  	'Weber',
+  	'Secretary',
+  	28,
+  	19500.00
+);
+
+--Série de consultas pós-inserção:
+/*
+SELECT * FROM myemployees;
+SELECT * FROM myemployees WHERE salary > 30000;
+SELECT firstname, lastname FROM myemployees WHERE age < 30;
+SELECT firstname, lastname, salary FROM myemployees WHERE title LIKE '%Programmer%';
+SELECT * FROM myemployees WHERE lastname LIKE '%ebe%';
+SELECT firstname FROM myemployees WHERE firstname = 'Potsy';
+SELECT firstname FROM myemployees WHERE age > 80;
+SELECT * FROM myemployees WHERE lastname LIKE '%ith';
+*/
+
+--Sucessão de UPDATEs na tabela exercício:
+/*
+UPDATE myemployees
+	SET lastname = 'Weber-Williams'
+	WHERE firstname = 'Josie' AND lastname = 'Weber';
+
+UPDATE myemployees
+	SET age = age+1
+	WHERE firstname='Dirk' AND lastname='Smith';
+
+UPDATE myemployees
+	SET title='Administrative Assistant'
+	WHERE title='Secretary';
+
+UPDATE myemployees
+	SET salary=salary+3500
+	WHERE salary < 30000;
+
+UPDATE myemployees
+	SET salary=salary+4500
+	WHERE salary > 33500
+
+UPDATE myemployees
+	SET title='Programmer III'
+	WHERE title='Programmer II'
+
+UPDATE myemployees
+	SET title='Programmer II'
+	WHERE title='Programmer';
+
+UPDATE myemployees
+	SET age = age+1
+	WHERE firstname LIKE 'T%';
+
+UPDATE myemployees
+	SET salary=salary+40
+	WHERE salary<4000;
+
+UPDATE myemployees
+	SET salary = '80000'
+	WHERE firstname='Luiz Cesar Eduardo' AND lastname='Da Silva';
+
+UPDATE myemployees
+	SET age='13'
+	WHERE title='Student';
+
+UPDATE myemployees
+	SET salary=salary+500
+	WHERE firstname='Mariana' AND lastname='Da Silva';
+*/
+
+--Sucessão de deleções da tabela exercício:
+/*
+DELETE FROM myemployees
+	WHERE firstname = 'Josie' AND lastname='Weber-Williams';
+
+DELETE FROM myemployees
+	WHERE salary > 70000;
+
+DELETE FROM myemployees
+	WHERE title='Retired';
+
+DELETE FROM myemployees
+	WHERE age < 18;
+
+DELETE FROM myemployees;
+*/
+
+--DROP {exclusão total} da tabela exercício:
+DROP TABLE myemployees;
